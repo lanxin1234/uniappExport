@@ -80,8 +80,10 @@
     },
     methods: {
       async getTodayDate() {
-        let startTime = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-        let endTime = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+        // let startTime = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+        // let endTime = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+        let startTime = moment().subtract(1, 'days').format('YYYY-MM-DD ')+ '18:00:00';
+        let endTime = moment().format('YYYY-MM-DD ')+ '18:00:00';
         this.timeRange = [startTime, endTime]
         let qRes = await this.dbQHepler.selectSql(
           `select * from ${this.tableName}  where times >= '${startTime}' AND times<= '${endTime}' order by times desc`
