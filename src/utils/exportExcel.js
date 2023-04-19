@@ -38,8 +38,7 @@ function exportFile(fileData, name,documentName = "项目Excel文件") {
       }, function(dirEntry2) {
         // 创建文件,防止重名，按照日期名称 
 
-        let fileName = name + "_PDA";
-        console.log(fileName);
+        let fileName = name;
         dirEntry2.getFile(`${fileName}.xlsx`, {
           create: true
         }, function(fileEntry) {

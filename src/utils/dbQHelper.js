@@ -1,4 +1,5 @@
 import DbHelper from '@/utils/dbHelper.js'
+import{requestAndroidPermission, gotoAppPermissionSetting} from '@/utils/permission.js'
 export default class DbQHelper {
   constructor() {
     this.dbHelper = new DbHelper();
@@ -8,6 +9,12 @@ export default class DbQHelper {
   }
 
   async dbOpen() {
+    let result = await requestAndroidPermission('android.permission.READ_EXTERNAL_STORAGE');
+    let result2 = await requestAndroidPermission('android.permission.WRITE_EXTERNAL_STORAGE');
+    // //若所需权限被拒绝,则打开APP设置界面,可以在APP设置界面打开相应权限
+    if (result == -1) {
+      gotoAppPermissionSetting()
+    }
     let isOpen = await this.dbHelper.isOpenDatabase(this.dbName, this.dbFilePath)
     if (!isOpen)
       await this.dbHelper.openDatabase(this.dbName, this.dbFilePath)

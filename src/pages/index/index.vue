@@ -91,7 +91,16 @@
         this.count = qRes.length;
         this.mapData(qRes);
         this.resultList = qRes;
-        this.fileName = moment().endOf('day').format('YYYYMMDD');
+        // this.fileName = moment().endOf('day').format('MDD');
+        this.fileName = 'PDA记录_'+[moment().subtract(1, 'days').format('M月DD日')+'18:00:00',moment().format('M月DD日')+'18:00:00'].join('-')+'_'+ plus.device.imei;
+        plus.device.getInfo({
+        		success:function(e){
+        			console.log('getDeviceInfo success: '+JSON.stringify(e));
+        		},
+        		fail:function(e){
+        			console.log('getDeviceInfo failed: '+JSON.stringify(e));
+        		}
+        	});
       },
       async getRangeDate() {
         let qRes = await this.dbQHepler.selectSql(
@@ -103,8 +112,8 @@
       },
       //数据导出
       handleDownload() {
-        const tHeader = ['VIN', '采集时间', '状态', '上传次数', '采集项', '查验工位', '采集用户', '文件路径'];
-        const filterVal = ['vin', 'times', 'uploadStateName', 'uploadCount', 'fileName', 'orgName', 'userName',
+        const tHeader = ['VIN', '扫码时间','拍照完成时间','上传预采集开始时间','上传预采集完成时间', '状态', '上传次数', '采集项', '查验工位', '采集用户', '文件路径'];
+        const filterVal = ['vin', 'scanTime','times', 'uploadStartTime','uploadedTimes','uploadStateName', 'uploadCount', 'fileName', 'orgName', 'userName',
           'filePath'
         ];
         //导出选中的数据
@@ -146,7 +155,7 @@
       },
       dateChange(time) {
         this.timeRange = time;
-        this.fileName=[moment(this.timeRange[0]).format('YYMMDDHHmm'),moment(this.timeRange[1]).format('YYMMDDHHmm')].join('-');
+        this.fileName='PDA记录_'+ [moment(this.timeRange[0]).format('M月DD日HH:mm:ss'),moment(this.timeRange[1]).format('M月DD日HH:mm:ss')].join('-')+'_'+ plus.device.imei;
         this.getRangeDate()
       },
       //数据分组
