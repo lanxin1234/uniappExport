@@ -112,8 +112,8 @@
       },
       //数据导出
       handleDownload() {
-        const tHeader = ['VIN', '扫码时间','拍照完成时间','上传预采集开始时间','上传预采集完成时间', '状态', '上传次数', '采集项', '查验工位', '采集用户', '文件路径'];
-        const filterVal = ['vin', 'scanTime','times', 'uploadStartTime','uploadedTimes','uploadStateName', 'uploadCount', 'fileName', 'orgName', 'userName',
+        const tHeader = ['VIN', '扫码时间','拍照完成时间','上传预采集开始时间','上传预采集完成时间', '耗时','状态', '上传次数', '采集项', '查验工位', '采集用户', '文件路径'];
+        const filterVal = ['vin', 'scanTime','times', 'uploadStartTime','uploadedTimes','consumed','uploadStateName', 'uploadCount', 'fileName', 'orgName', 'userName',
           'filePath'
         ];
         //导出选中的数据
@@ -121,6 +121,7 @@
         checkedList.forEach(item => {
           item.uploadCount = item.uploadCount === 0 ? 1 : item.uploadCount;
           item.uploadStateName = getStatus(item.uploadState);
+          item.consumed = getTimeConsumed(item.scanTime, item.uploadedTimes)
           //1-待上传 2-上传中 3-上传完成 4-上传失败
         })
 
@@ -146,6 +147,12 @@
         }
         //数据格式化
         exportExcel(tHeader, filterVal, checkedList, this.fileName)
+        // 添加耗时时间计算
+        function getTimeConsumed(startTime, endTime){
+            if(!startTime || !endTime) return 0
+            let times = moment(new Date(endTime)).diff(moment(new Date(startTime)),'seconds');
+            return times
+        }
       },
       checkStatus(data) {
         let res = data.filter(item => {
