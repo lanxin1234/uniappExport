@@ -112,8 +112,8 @@
       },
       //数据导出
       handleDownload() {
-        const tHeader = ['VIN', '扫码时间','拍照完成时间','上传预采集开始时间','上传预采集完成时间', '耗时','状态', '上传次数', '采集项', '查验工位', '采集用户', '文件路径'];
-        const filterVal = ['vin', 'scanTime','times', 'uploadStartTime','uploadedTimes','consumed','uploadStateName', 'uploadCount', 'fileName', 'orgName', 'userName',
+        const tHeader = ['VIN', '扫码时间','拍照完成时间','耗时（拍照完成时间-扫码时间）','上传预采集开始时间','上传预采集完成时间', '上传耗时（上传预采集完成时间-上传预采集开始时间）','状态', '上传次数', '采集项', '查验工位', '采集用户', '文件路径'];
+        const filterVal = ['vin', 'scanTime','times', 'consumed','uploadStartTime','uploadedTimes','uploadConsumed','uploadStateName', 'uploadCount', 'fileName', 'orgName', 'userName',
           'filePath'
         ];
         //导出选中的数据
@@ -121,7 +121,8 @@
         checkedList.forEach(item => {
           item.uploadCount = item.uploadCount === 0 ? 1 : item.uploadCount;
           item.uploadStateName = getStatus(item.uploadState);
-          item.consumed = getTimeConsumed(item.scanTime, item.uploadedTimes)
+          item.uploadConsumed = getTimeConsumed(item.uploadStartTime, item.uploadedTimes)
+          item.consumed = getTimeConsumed(item.scanTime, item.times)
           //1-待上传 2-上传中 3-上传完成 4-上传失败
         })
 
